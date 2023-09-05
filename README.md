@@ -4,7 +4,7 @@ CryptoPredictorAPI is a work-in-progress project aimed at predicting cryptocurre
 
 ## Features
 
-- Fetch real-time price data from Binance, export the data to csv and train models.
+- Fetch real-time price data from Binance, export the data to csv to train models.
 - Retrieve historical K-line data.
 - Analyze K-line patterns.
 - Predict future prices using TensorFlow models.
