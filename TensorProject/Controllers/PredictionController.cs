@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using TensorProject.Models;
-using TensorProject.Services;
 
 [Route("api/[controller]")]
 [ApiController]

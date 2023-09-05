@@ -1,7 +1,4 @@
-﻿using System;
-using System.Net.Http;
-using Microsoft.Extensions.Configuration;
-using TensorProject.Services.IServices;
+﻿using TensorProject.Services.IServices;
 
 namespace TensorProject.Services;
 
