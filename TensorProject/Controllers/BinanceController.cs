@@ -2,9 +2,6 @@
 using TensorProject.Models;
 using TensorProject.Services.IServices;
 using System.Globalization;
-using TensorProject.Services;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 
 namespace TensorProject.Controllers

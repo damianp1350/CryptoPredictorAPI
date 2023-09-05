@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using Microsoft.EntityFrameworkCore;
-using TensorProject.Models;
+﻿using TensorProject.Models;
 using TensorProject.Services.IServices;
 
 namespace TensorProject.Services;

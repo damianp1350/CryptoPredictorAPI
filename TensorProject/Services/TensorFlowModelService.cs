@@ -1,7 +1,6 @@
 ﻿using Microsoft.ML;
 using TensorProject.Models;
 using TensorProject.Services.IServices;
-using System.Collections.Generic;
 
 namespace TensorProject.Services
 {
