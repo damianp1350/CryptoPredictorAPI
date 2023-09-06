@@ -28,12 +28,16 @@ CryptoPredictorAPI is a work-in-progress project aimed at predicting cryptocurre
    cd .\TensorProject\
    ```
 
-3. **Update the `appsettings.json` file**. Replace the placeholders for Binance API keys:
+3. **Update the `appsettings.json` file**. Replace the placeholders for Binance API keys, Csv export file path:
    ```json
    "BinanceSettings": {
        "ApiKey": "YOUR_BINANCE_API_KEY",
        "ApiSecret": "YOUR_BINANCE_API_SECRET"
-   }
+   },
+   "CsvExportSettings": {
+    "FilePath": "PLACEHOLDER"
+   },
+  
    ```
 
 4. **Add your TensorFlow model** (`model.pb`) to the `TensorFlowModelService` directory. Ensure you replace any placeholders with the actual column names. To view your column names, you can use TensorBoard or print them in the console.
