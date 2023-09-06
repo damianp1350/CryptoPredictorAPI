@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
+using TensorProject.Models;
 using TensorProject.Services;
 using TensorProject.Services.IServices;
 
@@ -22,5 +22,6 @@ public static class ServiceExtensions
 
         services.AddDbContext<BinanceDbContext>(options =>
         options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+        services.Configure<CsvExportSettings>(configuration.GetSection("CsvExportSettings"));
     }
 }
