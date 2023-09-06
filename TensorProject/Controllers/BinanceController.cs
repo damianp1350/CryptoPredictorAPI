@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using TensorProject.Models;
 using TensorProject.Services.IServices;
-using System.Globalization;
-using System.Text.Json;
 
 namespace TensorProject.Controllers
 {
@@ -10,112 +7,56 @@ namespace TensorProject.Controllers
     [Route("[controller]")]
     public class BinanceController : ControllerBase
     {
-        private readonly IBinanceDataConverter _dataConverter;
-        private readonly IBinanceHttpRequestMessageCreator _messageCreator;
-        private readonly IBinanceResponseHandler _responseHandler;
-        private readonly IBinanceJsonDeserializer _jsonDeserializer;
-        private readonly HttpClient _httpClient;
-        private readonly BinanceDbContext _dbContext;
+        private readonly IBinanceService _binanceService;
 
-        public BinanceController(
-            IBinanceHttpRequestMessageCreator messageCreator,
-            IBinanceResponseHandler responseHandler,
-            IBinanceJsonDeserializer jsonDeserializer,
-            HttpClient httpClient,
-            BinanceDbContext context,
-            IBinanceDataConverter dataConverter)
+        public BinanceController(IBinanceService binanceService)
         {
-            _messageCreator = messageCreator;
-            _responseHandler = responseHandler;
-            _jsonDeserializer = jsonDeserializer;
-            _httpClient = httpClient;
-            _dbContext = context;
-            _dataConverter = dataConverter;
+            _binanceService = binanceService;
         }
-
 
         [HttpGet("price/{symbol}")]
         public async Task<IActionResult> GetPrice(string symbol)
         {
-            var request = _messageCreator.CreatePriceRequestMessage(symbol);
-            var response = await _httpClient.SendAsync(request);
-            var responseData = await _responseHandler.HandleResponse(response);
+            var price = await _binanceService.FetchPrice(symbol);
 
-            var priceData = _jsonDeserializer.Deserialize<BinancePriceDataModel>(responseData);
-            if (priceData != null)
-            {
-                if (Decimal.TryParse(priceData.Price, NumberStyles.Number, new CultureInfo("en-US"), out var priceValue))
-                    return Ok(priceValue);
-                else
-                    return BadRequest();
-            }
-
-            return NotFound();
+            if (price.HasValue)
+                return Ok(price.Value);
+            else
+                return NotFound();
         }
 
-        [HttpGet("historical-data/{symbol}/{interval}")]
+        [HttpGet("historical/{symbol}/{interval}")]
         public async Task<IActionResult> GetHistoricalData(string symbol, string interval, int limit = 500)
         {
-            var request = _messageCreator.CreateHistoricalDataRequestMessage(symbol, interval, limit);
-            var response = await _httpClient.SendAsync(request);
-            var responseData = await _responseHandler.HandleResponse(response);
+            var historicalData = await _binanceService.FetchHistoricalData(symbol, interval, limit);
 
-            var historicalData = _jsonDeserializer.Deserialize<List<List<object>>>(responseData);
             if (historicalData != null && historicalData.Any())
                 return Ok(historicalData);
-
-            return NotFound();
+            else
+                return NotFound();
         }
 
-        [HttpGet("last24hours/{symbol}")]
+        [HttpGet("historical/last-24-hours/{symbol}")]
         public async Task<IActionResult> GetHistoricalData24h(string symbol)
         {
-            const string interval = "1h";
-            const int limit = 24;
-
-            var request = _messageCreator.CreateHistoricalKlinesRequestMessage(symbol, interval, limit);
-            var response = await _httpClient.SendAsync(request);
-            var responseData = await _responseHandler.HandleResponse(response);
-
-            var historicalData = _jsonDeserializer.Deserialize<List<List<object>>>(responseData);
+            var historicalData = await _binanceService.FetchHistoricalData24h(symbol);
             if (historicalData != null && historicalData.Any())
                 return Ok(historicalData);
-
-            return NotFound();
+            else
+                return NotFound();
         }
 
-        [HttpGet("allHistoricalData/{symbol}")]
+        [HttpGet("historical/all/{symbol}")]
         public async Task<IActionResult> GetAllHistoricalData(string symbol, long? startTime = null, long? endTime = null)
         {
-            const string interval = "1d";
-            const int limit = 1000;
-
-            var request = _messageCreator.CreateHistoricalKlinesRequestMessage(symbol, interval, limit, startTime, endTime);
-            var response = await _httpClient.SendAsync(request);
-
-            if (!response.IsSuccessStatusCode)
+            try
             {
-                return BadRequest("Error getting data from Binance.");
+                var models = await _binanceService.FetchAllHistoricalData(symbol, startTime, endTime);
+                return Ok(models);
             }
-
-            var jsonResponse = await response.Content.ReadAsStringAsync();
-
-            using (JsonDocument doc = JsonDocument.Parse(jsonResponse))
+            catch (Exception ex)
             {
-                var rootElement = doc.RootElement;
-                if (rootElement.ValueKind == JsonValueKind.Array)
-                {
-                    var models = _dataConverter.ConvertKlineData(rootElement.EnumerateArray().ToList());
-
-                    _dbContext.BinanceHistoricalDatas.AddRange(models);
-                    await _dbContext.SaveChangesAsync();
-
-                    return Ok(models);
-                }
-                else
-                {
-                    return BadRequest("Invalid JSON structure.");
-                }
+                return BadRequest(ex.Message);
             }
         }
     }
