@@ -1,6 +1,7 @@
-﻿using TensorProject.Services.IServices;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using TensorProject.Services;
-using Microsoft.EntityFrameworkCore;
+using TensorProject.Services.IServices;
 
 public static class ServiceExtensions
 {
@@ -10,11 +11,15 @@ public static class ServiceExtensions
         services.AddSingleton<IBinanceResponseHandler, BinanceResponseHandler>();
         services.AddSingleton<IBinanceJsonDeserializer, BinanceJsonDeserializer>();
         services.AddSingleton<IBinanceDataConverter, BinanceDataConverter>();
+
         services.AddScoped<IDataLoaderService, DataLoaderService>();
         services.AddScoped<ITensorFlowModelService, TensorFlowModelService>();
         services.AddScoped<ICandlePatternAnalyzerService, CandlePatternAnalyzerService>();
         services.AddTransient<ICsvExportService, CsvExportService>();
-        services.AddHttpClient();
+
+        services.AddHttpClient("BinanceClient");
+        services.AddScoped<IBinanceService, BinanceService>();
+
         services.AddDbContext<BinanceDbContext>(options =>
         options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
     }
