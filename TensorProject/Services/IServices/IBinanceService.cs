@@ -8,5 +8,6 @@ namespace TensorProject.Services.IServices
         Task<List<List<object>>> FetchHistoricalData(string symbol, string interval, int limit = 500);
         Task<List<List<object>>> FetchHistoricalData24h(string symbol);
         Task<decimal?> FetchPrice(string symbol);
+        Task<(BinanceKlineModel model, bool isNew)> FetchLatestHistoricalData(string symbol);
     }
 }
