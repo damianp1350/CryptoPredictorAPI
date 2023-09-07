@@ -63,16 +63,16 @@ CryptoPredictorAPI is a work-in-progress project aimed at predicting cryptocurre
 For a systematic retrieval of historical K-line data for the BTC-USDT pair from Binance, utilize the following UNIX timestamps in the specified order, for example:
 
 1. 
-   - `startTime`: `1608130279000`
-   - `endTime`: `1693996399000`
+   - `startTime`: `1434563200000`
+   - `endTime`: `1520876800000`
 
 2. 
    - `startTime`: `1521763200000`
    - `endTime`: `1608076800000`
 
 3. 
-   - `startTime`: `1434563200000`
-   - `endTime`: `1520876800000`
+   - `startTime`: `1608130279000`
+   - `endTime`: `1693996399000`
 
 Each set of timestamps allows for sequential and non-overlapping data retrieval for the given time intervals. Make sure to fetch data in the order provided to ensure data continuity.
 
