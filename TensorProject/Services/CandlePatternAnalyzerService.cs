@@ -15,7 +15,7 @@ namespace TensorProject.Services
 
         public Dictionary<string, string> CalculateNextCandleProbabilities()
         {
-            var historicalData = _dbContext.BinanceHistoricalDatas.ToList();
+            var historicalData = _dbContext.BinanceHistoricalData.ToList();
             var patternCounts = new Dictionary<string, int>();
             var nextPatternCounts = new Dictionary<string, Dictionary<string, int>>();
 

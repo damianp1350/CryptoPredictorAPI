@@ -14,7 +14,7 @@ public class DataLoaderService : IDataLoaderService
 
     public IEnumerable<BitcoinPriceData> LoadTrainingData()
     {
-        return _dbContext.BinanceHistoricalDatas.Select(d => new BitcoinPriceData
+        return _dbContext.BinanceHistoricalData.Select(d => new BitcoinPriceData
         {
             Open = (float)d.Open,
             High = (float)d.High,

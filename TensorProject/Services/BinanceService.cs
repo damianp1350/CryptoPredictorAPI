@@ -85,7 +85,8 @@ namespace TensorProject.Services
                 if (rootElement.ValueKind == JsonValueKind.Array)
                 {
                     var models = _dataConverter.ConvertKlineData(rootElement.EnumerateArray().ToList());
-                    _dbContext.BinanceHistoricalDatas.AddRange(models);
+                    models = models.OrderByDescending(m => m.OpenTime).ToList();
+                    _dbContext.BinanceHistoricalData.AddRange(models);
                     await _dbContext.SaveChangesAsync();
                     return models;
                 }

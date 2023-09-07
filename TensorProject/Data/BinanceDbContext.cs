@@ -5,5 +5,5 @@ public class BinanceDbContext : DbContext
 {
     public BinanceDbContext(DbContextOptions<BinanceDbContext> options) : base(options) { }
 
-    public DbSet<BinanceKlineModel> BinanceHistoricalDatas { get; set; }
+    public DbSet<BinanceKlineModel> BinanceHistoricalData { get; set; }
 }

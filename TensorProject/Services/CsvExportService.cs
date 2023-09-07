@@ -15,7 +15,7 @@ public class CsvExportService : ICsvExportService
 
     public void ExportDataToCsv(string filePath)
     {
-        var data = _dbContext.BinanceHistoricalDatas.ToList();
+        var data = _dbContext.BinanceHistoricalData.ToList();
 
         using (var writer = new StreamWriter(filePath, false, Encoding.UTF8))
         using (var csv = new CsvWriter(writer, System.Globalization.CultureInfo.InvariantCulture))
