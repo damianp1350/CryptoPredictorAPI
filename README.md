@@ -72,7 +72,7 @@ For a systematic retrieval of historical K-line data for the BTC-USDT pair from 
 
 3. 
    - `startTime`: `1608130279000`
-   - `endTime`: `1693996399000`
+   - `endTime`: `1693996399000` // Adjust this to your current time.
 
 Each set of timestamps allows for sequential and non-overlapping data retrieval for the given time intervals. Make sure to fetch data in the order provided to ensure data continuity.
 
