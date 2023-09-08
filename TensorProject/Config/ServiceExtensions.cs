@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Hangfire;
+using Microsoft.EntityFrameworkCore;
 using TensorProject.Models;
 using TensorProject.Services;
 using TensorProject.Services.IServices;
@@ -23,5 +24,8 @@ public static class ServiceExtensions
         services.AddDbContext<BinanceDbContext>(options =>
         options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
         services.Configure<CsvExportSettings>(configuration.GetSection("CsvExportSettings"));
+
+        services.AddHangfire(x => x.UseSqlServerStorage(configuration.GetConnectionString("DefaultConnection")));
+        services.AddHangfireServer();
     }
 }
