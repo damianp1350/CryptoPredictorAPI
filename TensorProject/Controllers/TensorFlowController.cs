@@ -1,19 +1,19 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TensorProject.Models;
-using TensorProject.Services;
+using TensorProject.Services.IServices;
 
 [Route("api/[controller]")]
 [ApiController]
-public class PredictionController : ControllerBase
+public class TensorFlowController : ControllerBase
 {
-    private readonly TensorFlowModelService _tensorFlowModelService;
+    private readonly ITensorFlowModelService _tensorFlowModelService;
 
-    public PredictionController()
+    public TensorFlowController(ITensorFlowModelService tensorFlowModelService)
     {
-        _tensorFlowModelService = new TensorFlowModelService();
+        _tensorFlowModelService = tensorFlowModelService;
     }
 
-    [HttpPost("predict")]
+    [HttpPost("predict-with-model")]
     public IActionResult Predict([FromBody] BitcoinPriceInput input)
     {
         if (input == null || input.CloseTime == 0)

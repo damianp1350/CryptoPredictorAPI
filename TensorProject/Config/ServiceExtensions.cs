@@ -16,6 +16,7 @@ public static class ServiceExtensions
         services.AddScoped<IDataLoaderService, DataLoaderService>();
         services.AddScoped<ITensorFlowModelService, TensorFlowModelService>();
         services.AddScoped<ICandlePatternAnalyzerService, CandlePatternAnalyzerService>();
+        services.AddScoped<ICandleTrendPredictorService, CandleTrendPredictorService>();
         services.AddTransient<ICsvExportService, CsvExportService>();
 
         services.AddHttpClient("BinanceClient");
