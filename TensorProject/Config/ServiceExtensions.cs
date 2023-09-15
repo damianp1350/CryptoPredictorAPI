@@ -18,6 +18,8 @@ public static class ServiceExtensions
         services.AddScoped<ICandlePatternAnalyzerService, CandlePatternAnalyzerService>();
         services.AddScoped<IDataService, DataService>();
         services.AddScoped<ICandleTrendPredictorService, CandleTrendPredictorService>();
+        services.AddScoped<IHistoricalDataRetrievalService, HistoricalDataRetrievalService>();
+
         services.AddTransient<ICsvExportService, CsvExportService>();
 
         services.AddHttpClient("BinanceClient");

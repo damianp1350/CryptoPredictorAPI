@@ -16,5 +16,9 @@ namespace TensorProject.Services
         {
             return _dbContext.BinanceHistoricalData.OrderBy(data => data.OpenTime).ToList();
         }
+        public double CalculatePercentageOfCloseDifference(decimal priceDifference, decimal lastClosePrice)
+        {
+            return (double)(priceDifference / lastClosePrice) * 100;
+        }
     }
 }
