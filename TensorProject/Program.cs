@@ -29,8 +29,12 @@ app.MapControllers();
 using (var serviceScope = app.Services.CreateScope())
 {
     var services = serviceScope.ServiceProvider;
+
     var binanceService = services.GetRequiredService<IBinanceService>();
     RecurringJob.AddOrUpdate("fetch-latest-data-BTCUSDT", () => binanceService.FetchLatestHistoricalData("BTCUSDT"), "*/30 * * * *");
+
+    var historicalDataRetrievalService = services.GetRequiredService<IHistoricalDataRetrievalService>();
+    historicalDataRetrievalService.ScheduleHistoricalDataRetrieval();
 }
 
 app.Run();
