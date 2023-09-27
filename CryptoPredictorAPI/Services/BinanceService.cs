@@ -1,9 +1,9 @@
-﻿using CryptoPredictorApi.Models;
-using CryptoPredictorApi.Services.IServices;
+﻿using CryptoPredictorAPI.Models;
+using CryptoPredictorAPI.Services.IServices;
 using System.Globalization;
 using System.Text.Json;
 
-namespace CryptoPredictorApi.Services
+namespace CryptoPredictorAPI.Services
 {
     public class BinanceService : IBinanceService
     {
@@ -95,56 +95,6 @@ namespace CryptoPredictorApi.Services
                     throw new Exception("Invalid JSON structure.");
                 }
             }
-        }
-        public async Task<(BinanceKlineModel model, bool isNew)> FetchLatestHistoricalData(string symbol)
-        {
-            DateTime now = DateTime.UtcNow;
-            DateTime startDate = now.AddDays(-1);
-            DateTime endDate = now;
-
-            long startTimeStamp = new DateTimeOffset(startDate).ToUnixTimeMilliseconds();
-            long endTimeStamp = new DateTimeOffset(endDate).ToUnixTimeMilliseconds();
-
-            var request = _messageCreator.CreateHistoricalKlinesRequestMessage(symbol, "1d", 1, startTimeStamp, endTimeStamp);
-            var response = await _httpClient.SendAsync(request);
-
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new Exception("Error getting data from Binance.");
-            }
-
-            var jsonResponse = await response.Content.ReadAsStringAsync();
-            BinanceKlineModel model;
-
-            using (JsonDocument doc = JsonDocument.Parse(jsonResponse))
-            {
-                var rootElement = doc.RootElement;
-                if (rootElement.ValueKind == JsonValueKind.Array)
-                {
-                    var models = _dataConverter.ConvertKlineData(rootElement.EnumerateArray().ToList());
-                    model = models.FirstOrDefault();
-                }
-                else
-                {
-                    throw new Exception("Invalid JSON structure.");
-                }
-            }
-
-            if (model != null)
-            {
-                var existingModel = _dbContext.BinanceHistoricalData.FirstOrDefault(m => m.OpenTime == model.OpenTime && m.CloseTime == model.CloseTime);
-                if (existingModel == null)
-                {
-                    _dbContext.BinanceHistoricalData.Add(model);
-                    await _dbContext.SaveChangesAsync();
-                    return (model, true);
-                }
-                else
-                {
-                    return (model, false);
-                }
-            }
-            return (null, false);
         }
     }
 }

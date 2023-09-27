@@ -1,4 +1,4 @@
-﻿namespace CryptoPredictorApi.Models
+﻿namespace CryptoPredictorAPI.Models
 {
     public class BitcoinPriceOutput
     {

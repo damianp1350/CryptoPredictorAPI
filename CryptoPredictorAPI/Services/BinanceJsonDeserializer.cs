@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
-using CryptoPredictorApi.Services.IServices;
+using CryptoPredictorAPI.Services.IServices;
 
-namespace CryptoPredictorApi.Services
+namespace CryptoPredictorAPI.Services
 {
     public class BinanceJsonDeserializer : IBinanceJsonDeserializer
     {

@@ -1,8 +1,8 @@
 ﻿using Microsoft.ML;
-using CryptoPredictorApi.Models;
-using CryptoPredictorApi.Services.IServices;
+using CryptoPredictorAPI.Models;
+using CryptoPredictorAPI.Services.IServices;
 
-namespace CryptoPredictorApi.Services
+namespace CryptoPredictorAPI.Services
 {
     public class TensorFlowModelService : ITensorFlowModelService
     {

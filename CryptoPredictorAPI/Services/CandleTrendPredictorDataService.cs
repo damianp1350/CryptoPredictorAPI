@@ -1,13 +1,13 @@
-﻿using CryptoPredictorApi.Models;
-using CryptoPredictorApi.Services.IServices;
+﻿using CryptoPredictorAPI.Models;
+using CryptoPredictorAPI.Services.IServices;
 
-namespace CryptoPredictorApi.Services
+namespace CryptoPredictorAPI.Services
 {
-    public class DataService : IDataService
+    public class CandleTrendPredictorDataService : ICandleTrendPredictorDataService
     {
         private readonly BinanceDbContext _dbContext;
 
-        public DataService(BinanceDbContext dbContext)
+        public CandleTrendPredictorDataService(BinanceDbContext dbContext)
         {
             _dbContext = dbContext;
         }

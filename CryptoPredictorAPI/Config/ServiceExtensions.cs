@@ -1,8 +1,8 @@
 ﻿using Hangfire;
 using Microsoft.EntityFrameworkCore;
-using CryptoPredictorApi.Models;
-using CryptoPredictorApi.Services;
-using CryptoPredictorApi.Services.IServices;
+using CryptoPredictorAPI.Models;
+using CryptoPredictorAPI.Services;
+using CryptoPredictorAPI.Services.IServices;
 
 public static class ServiceExtensions
 {
@@ -13,16 +13,15 @@ public static class ServiceExtensions
         services.AddSingleton<IBinanceJsonDeserializer, BinanceJsonDeserializer>();
         services.AddSingleton<IBinanceDataConverter, BinanceDataConverter>();
 
-        services.AddScoped<IDataLoaderService, DataLoaderService>();
+        services.AddScoped<IRandomInvestmentTriggerService, RandomInvestmentTriggerService>();
         services.AddScoped<ITensorFlowModelService, TensorFlowModelService>();
-        services.AddScoped<ICandlePatternAnalyzerService, CandlePatternAnalyzerService>();
-        services.AddScoped<IDataService, DataService>();
+        services.AddScoped<ICandleTrendPredictorDataService, CandleTrendPredictorDataService>();
         services.AddScoped<ICandleTrendPredictorService, CandleTrendPredictorService>();
-        services.AddScoped<IHistoricalDataRetrievalService, HistoricalDataRetrievalService>();
+        services.AddScoped<IBinanceAutoDataRetrievalService, BinanceAutoDataRetrievalService>();
         services.AddScoped<IBinanceService, BinanceService>();
         services.AddScoped<IBinanceTestnetService, BinanceTestnetService>();
 
-        services.AddTransient<ICsvExportService, CsvExportService>();
+        services.AddTransient<IDatabaseCsvExportService, DatabaseCsvExportService>();
 
         services.AddHttpClient("BinanceTestnetClient");
         services.AddHttpClient("BinanceClient");

@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
-using CryptoPredictorApi.Models;
+using CryptoPredictorAPI.Models;
 
-namespace CryptoPredictorApi.Services.IServices
+namespace CryptoPredictorAPI.Services.IServices
 {
     public interface IBinanceDataConverter
     {

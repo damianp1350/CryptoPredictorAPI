@@ -1,8 +1,8 @@
 ﻿using System.Globalization;
 using System.Text;
-using CryptoPredictorApi.Services.IServices;
+using CryptoPredictorAPI.Services.IServices;
 
-namespace CryptoPredictorApi.Services;
+namespace CryptoPredictorAPI.Services;
 
 public class BinanceHttpRequestMessageCreator : IBinanceHttpRequestMessageCreator
 {
@@ -80,7 +80,7 @@ public class BinanceHttpRequestMessageCreator : IBinanceHttpRequestMessageCreato
         var request = new HttpRequestMessage
         {
             Method = HttpMethod.Post,
-            RequestUri = new Uri($"https://testnet.binance.vision/api/v3/order/test"), // If your response is {} then remove /test to make an actual order with testnet.binance virtual funds
+            RequestUri = new Uri($"https://testnet.binance.vision/api/v3/order"),
             Headers =
         {
             { "X-MBX-APIKEY", _testnetApiKey }

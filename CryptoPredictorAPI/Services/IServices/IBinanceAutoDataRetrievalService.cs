@@ -1,6 +1,6 @@
-﻿namespace CryptoPredictorApi.Services.IServices
+﻿namespace CryptoPredictorAPI.Services.IServices
 {
-    public interface IHistoricalDataRetrievalService
+    public interface IBinanceAutoDataRetrievalService
     {
         Task FetchAllHistoricalDataAutomated(string symbol);
         void ScheduleHistoricalDataRetrieval();

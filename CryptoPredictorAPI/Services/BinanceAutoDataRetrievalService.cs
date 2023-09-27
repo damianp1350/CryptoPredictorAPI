@@ -1,15 +1,15 @@
-﻿using CryptoPredictorApi.Services.IServices;
+﻿using CryptoPredictorAPI.Services.IServices;
 using Hangfire;
 
-namespace CryptoPredictorApi.Services
+namespace CryptoPredictorAPI.Services
 {
-    public class HistoricalDataRetrievalService : IHistoricalDataRetrievalService
+    public class BinanceAutoDataRetrievalService : IBinanceAutoDataRetrievalService
     {
         private readonly BinanceDbContext _dbContext;
         private readonly IBinanceService _binanceService;
         private const int DaysToFetchPerRequest = 900;
 
-        public HistoricalDataRetrievalService(BinanceDbContext dbContext, IBinanceService binanceService)
+        public BinanceAutoDataRetrievalService(BinanceDbContext dbContext, IBinanceService binanceService)
         {
             _dbContext = dbContext;
             _binanceService = binanceService;

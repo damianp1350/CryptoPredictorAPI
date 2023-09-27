@@ -1,9 +1,9 @@
-﻿using CryptoPredictorApi.Models;
-using CryptoPredictorApi.Services.IServices;
+﻿using CryptoPredictorAPI.Models;
+using CryptoPredictorAPI.Services.IServices;
 using System.Text.Json;
 using System.Globalization;
 
-namespace CryptoPredictorApi.Services
+namespace CryptoPredictorAPI.Services
 {
     public class BinanceDataConverter : IBinanceDataConverter
     {
