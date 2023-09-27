@@ -1,13 +1,13 @@
 # CryptoPredictorAPI
 
-CryptoPredictorAPI is a work-in-progress project aimed at predicting cryptocurrency prices using machine learning models and fetching real-time and historical data from the Binance API.
+CryptoPredictorAPI is a project aimed at interacting with the Binance and Binance Testnet APIs to fetch real-time and historical data, as well as trying to predict future prices using algorithms or your machine learning models.
 
 ## Features
 
-- Fetch real-time price data from Binance, export the data to csv to train models.
-- Retrieve historical K-line data.
-- Analyze K-line patterns.
-- Predict future prices using TensorFlow models.
+- Fetch real-time price data from Binance and Binance Testnet, with the ability to automatically retrieve data at specified intervals.
+- Export the fetched data to CSV for further analysis or training machine learning models.
+- Utilize predictive algorithms or your TensorFlow model to predict future price trends.
+- Random investment trigger service to simulate investment scenarios with Binance Testnet.
 
 ## Setup
 
@@ -25,22 +25,28 @@ CryptoPredictorAPI is a work-in-progress project aimed at predicting cryptocurre
 
 2. **Navigate to the project directory**:
    ```bash
-   cd .\TensorProject\
+   cd .\CryptoPredictorAPI\
    ```
 
-3. **Update the `appsettings.json` file**. Replace the placeholders for Binance API keys, Csv export file path:
+3. **Update the `appsettings.json` file**. Replace the placeholders for Binance API keys, Binance Testnet API keys, CSV export file path, and the database connection string:
    ```json
    "BinanceSettings": {
        "ApiKey": "YOUR_BINANCE_API_KEY",
        "ApiSecret": "YOUR_BINANCE_API_SECRET"
    },
-   "CsvExportSettings": {
-    "FilePath": "PLACEHOLDER"
+   "BinanceTestnetSettings": {
+    "ApiKey": "YOUR_BINANCE_TESTNET_API_KEY",
+    "ApiSecret": "YOUR_BINANCE_TESTNET_API_SECRET"
    },
-  
+     "CsvExportSettings": {
+    "FilePath": "YOUR_CSV_EXPORT_FILE_PATH"
+   },
+     "ConnectionStrings": {
+    "DefaultConnection": "Server=YOUR_SERVER;Database=Binance;Trusted_Connection=True;TrustServerCertificate=True;"
+   }
    ```
 
-4. **Add your TensorFlow model** (`model.pb`) to the `TensorFlowModelService` directory. Ensure you replace any placeholders with the actual column names. To view your column names, you can use TensorBoard or print them in the console.
+4. **You can add your TensorFlow model** (`model.pb`) to the `TensorFlowModelService` directory. Ensure you replace any placeholders with the actual column names. To view your column names, you can use TensorBoard or print them in the console.
 
 5. **Database Migrations**:
    
