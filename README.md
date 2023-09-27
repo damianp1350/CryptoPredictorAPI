@@ -1,6 +1,6 @@
 # CryptoPredictorAPI
 
-CryptoPredictorAPI is a project aimed at interacting with the Binance and Binance Testnet APIs to fetch real-time and historical data, as well as trying to predict future prices using algorithms or your machine learning models.
+CryptoPredictorAPI is a work in progress project aimed at interacting with the Binance and Binance Testnet APIs to fetch real-time and historical data, as well as trying to predict future prices using algorithms or your machine learning models.
 
 ## Features
 
