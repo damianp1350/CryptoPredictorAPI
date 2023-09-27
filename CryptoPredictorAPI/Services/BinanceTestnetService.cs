@@ -1,8 +1,8 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
-using CryptoPredictorApi.Services.IServices;
+using CryptoPredictorAPI.Services.IServices;
 
-namespace CryptoPredictorApi.Services
+namespace CryptoPredictorAPI.Services
 {
     public class BinanceTestnetService : IBinanceTestnetService
     {

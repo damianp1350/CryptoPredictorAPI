@@ -1,14 +1,14 @@
 ﻿using System.Text;
 using CsvHelper;
-using CryptoPredictorApi.Services.IServices;
+using CryptoPredictorAPI.Services.IServices;
 
-namespace CryptoPredictorApi.Services;
+namespace CryptoPredictorAPI.Services;
 
-public class CsvExportService : ICsvExportService
+public class DatabaseCsvExportService : IDatabaseCsvExportService
 {
     private readonly BinanceDbContext _dbContext;
 
-    public CsvExportService(BinanceDbContext dbContext)
+    public DatabaseCsvExportService(BinanceDbContext dbContext)
     {
         _dbContext = dbContext;
     }

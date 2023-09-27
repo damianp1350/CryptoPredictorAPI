@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using CryptoPredictorApi.Services.IServices;
+using CryptoPredictorAPI.Services.IServices;
 
-namespace CryptoPredictorApi.Controllers
+namespace CryptoPredictorAPI.Controllers
 {
     [ApiController]
     [Route("[controller]")]
@@ -53,30 +53,6 @@ namespace CryptoPredictorApi.Controllers
             {
                 var models = await _binanceService.FetchAllHistoricalData(symbol, startTime, endTime);
                 return Ok(models);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [HttpGet("historical/latest/{symbol}")]
-        public async Task<IActionResult> GetLatestHistoricalData(string symbol)
-        {
-            try
-            {
-                var (model, isNew) = await _binanceService.FetchLatestHistoricalData(symbol);
-                if (model != null)
-                {
-                    if (isNew)
-                        return Ok(new { model, message = "Data saved successfully." });
-                    else
-                        return Ok(new { model, message = "Data already exists in the database." });
-                }
-                else
-                {
-                    return NotFound();
-                }
             }
             catch (Exception ex)
             {

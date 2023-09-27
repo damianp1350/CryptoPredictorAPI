@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using CryptoPredictorApi.Services.IServices;
+using CryptoPredictorAPI.Services.IServices;
 
-namespace CryptoPredictorApi.Controllers
+namespace CryptoPredictorAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

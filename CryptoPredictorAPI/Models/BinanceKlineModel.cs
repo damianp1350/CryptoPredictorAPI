@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace CryptoPredictorApi.Models
+namespace CryptoPredictorAPI.Models
 {
     public class BinanceKlineModel
     {

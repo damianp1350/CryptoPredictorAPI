@@ -1,4 +1,4 @@
-﻿namespace CryptoPredictorApi.Services.IServices
+﻿namespace CryptoPredictorAPI.Services.IServices
 {
     public interface IBinanceTestnetService
     {

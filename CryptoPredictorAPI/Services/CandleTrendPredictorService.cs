@@ -1,7 +1,7 @@
-﻿using CryptoPredictorApi.Models;
-using CryptoPredictorApi.Services.IServices;
+﻿using CryptoPredictorAPI.Models;
+using CryptoPredictorAPI.Services.IServices;
 
-namespace CryptoPredictorApi.Services
+namespace CryptoPredictorAPI.Services
 {
     public class CandleTrendPredictorService : ICandleTrendPredictorService
     {
@@ -281,7 +281,7 @@ namespace CryptoPredictorApi.Services
                 weights["StochasticOscillator"] * stochasticOscillatorProb +
                 weights["ParabolicSAR"] * parabolicSARProb;
 
-            return compositeProbability;
+            return compositeProbability * 100;
         }
     }
 }

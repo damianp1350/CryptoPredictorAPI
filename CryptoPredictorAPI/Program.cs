@@ -1,5 +1,5 @@
 using Hangfire;
-using CryptoPredictorApi.Services.IServices;
+using CryptoPredictorAPI.Services.IServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,10 +30,7 @@ using (var serviceScope = app.Services.CreateScope())
 {
     var services = serviceScope.ServiceProvider;
 
-    var binanceService = services.GetRequiredService<IBinanceService>();
-    RecurringJob.AddOrUpdate("fetch-latest-data-BTCUSDT", () => binanceService.FetchLatestHistoricalData("BTCUSDT"), "*/30 * * * *");
-
-    var historicalDataRetrievalService = services.GetRequiredService<IHistoricalDataRetrievalService>();
+    var historicalDataRetrievalService = services.GetRequiredService<IBinanceAutoDataRetrievalService>();
     historicalDataRetrievalService.ScheduleHistoricalDataRetrieval();
 }
 

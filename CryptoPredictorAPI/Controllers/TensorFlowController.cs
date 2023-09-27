@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using CryptoPredictorApi.Models;
-using CryptoPredictorApi.Services.IServices;
+using CryptoPredictorAPI.Models;
+using CryptoPredictorAPI.Services.IServices;
 
 [Route("api/[controller]")]
 [ApiController]
