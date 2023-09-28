@@ -8,9 +8,6 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddHangfire(x => x.UseSqlServerStorage(builder.Configuration.GetConnectionString("DefaultConnection")));
-builder.Services.AddHangfireServer();
-
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -30,11 +27,14 @@ using (var serviceScope = app.Services.CreateScope())
 {
     var services = serviceScope.ServiceProvider;
 
-    var randomInvestmentTriggerService = services.GetRequiredService<IRandomInvestmentTriggerService>();
-    randomInvestmentTriggerService.ScheduleInvestment();
+    var testnetInvestmentService = services.GetRequiredService<ITestnetInvestmentService>();
+    testnetInvestmentService.ScheduleInvestment();
 
-    var historicalDataRetrievalService = services.GetRequiredService<IBinanceAutoDataRetrievalService>();
-    historicalDataRetrievalService.ScheduleHistoricalDataRetrieval();
+    var testnetAssetSellService = services.GetRequiredService<ITestnetAssetSellService>();
+    testnetAssetSellService.ScheduleSell();
+
+    var binanceAutoDataRetrievalService = services.GetRequiredService<IBinanceAutoDataRetrievalService>();
+    binanceAutoDataRetrievalService.ScheduleHistoricalDataRetrieval();
 }
 
 app.Run();

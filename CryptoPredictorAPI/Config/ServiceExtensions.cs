@@ -13,13 +13,14 @@ public static class ServiceExtensions
         services.AddSingleton<IBinanceJsonDeserializer, BinanceJsonDeserializer>();
         services.AddSingleton<IBinanceDataConverter, BinanceDataConverter>();
 
-        services.AddScoped<IRandomInvestmentTriggerService, RandomInvestmentTriggerService>();
+        services.AddScoped<ITestnetInvestmentService, TestnetInvestmentService>();
         services.AddScoped<ITensorFlowModelService, TensorFlowModelService>();
         services.AddScoped<ICandleTrendPredictorDataService, CandleTrendPredictorDataService>();
         services.AddScoped<ICandleTrendPredictorService, CandleTrendPredictorService>();
         services.AddScoped<IBinanceAutoDataRetrievalService, BinanceAutoDataRetrievalService>();
         services.AddScoped<IBinanceService, BinanceService>();
         services.AddScoped<IBinanceTestnetService, BinanceTestnetService>();
+        services.AddScoped<ITestnetAssetSellService, TestnetAssetSellService>();
 
         services.AddTransient<IDatabaseCsvExportService, DatabaseCsvExportService>();
 
