@@ -4,6 +4,9 @@ using CryptoPredictorAPI.Models;
 
 namespace CryptoPredictorAPI.Services
 {
+    /// <summary>
+    /// This service is for testing purposes only.
+    /// </summary>
     public class TestnetAssetSellService : ITestnetAssetSellService
     {
         private readonly IBinanceService _binanceService;
