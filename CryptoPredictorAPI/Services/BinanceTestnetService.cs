@@ -32,6 +32,15 @@ namespace CryptoPredictorAPI.Services
             return responseData;
         }
 
+        public async Task<string> MakeTestSell(string symbol, decimal quantity, decimal price)
+        {
+            var request = _messageCreator.CreateTestSellRequest(symbol, quantity, price, CreateSignature);
+            var response = await _client.SendAsync(request);
+            var responseData = await _responseHandler.HandleResponse(response);
+
+            return responseData;
+        }
+
         private string CreateSignature(string message)
         {
             using var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(_testnetApiSecret));

@@ -94,4 +94,34 @@ public class BinanceHttpRequestMessageCreator : IBinanceHttpRequestMessageCreato
 
         return request;
     }
+
+    public HttpRequestMessage CreateTestSellRequest(string symbol, decimal quantity, decimal price, Func<string, string> createSignature)
+    {
+        var quantityString = quantity.ToString(CultureInfo.InvariantCulture);
+        var priceString = price.ToString(CultureInfo.InvariantCulture);
+
+        var message = $"symbol={symbol}&side=SELL&type=LIMIT&timeInForce=GTC&quantity={quantityString}&price={priceString}&timestamp={DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()}";
+
+        var signature = createSignature(message);
+        message += $"&signature={signature}";
+
+        _logger.LogInformation($"Request message: {message}");
+
+        var request = new HttpRequestMessage
+        {
+            Method = HttpMethod.Post,
+            RequestUri = new Uri($"https://testnet.binance.vision/api/v3/order"),
+            Headers =
+        {
+            { "X-MBX-APIKEY", _testnetApiKey }
+        },
+            Content = new StringContent(
+                message,
+                Encoding.UTF8,
+                "application/x-www-form-urlencoded"
+            )
+        };
+
+        return request;
+    }
 }

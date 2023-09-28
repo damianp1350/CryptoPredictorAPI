@@ -8,11 +8,11 @@ namespace CryptoPredictorAPI.Controllers
     public class BinanceTestnetController : ControllerBase
     {
         private readonly IBinanceTestnetService _binanceTestnetService;
-        private readonly IRandomInvestmentTriggerService _randomInvestmentTriggerService;
+        private readonly ITestnetInvestmentService _randomInvestmentTriggerService;
 
         public BinanceTestnetController(
             IBinanceTestnetService binanceTestnetService,
-            IRandomInvestmentTriggerService randomInvestmentTriggerService)
+            ITestnetInvestmentService randomInvestmentTriggerService)
         {
             _binanceTestnetService = binanceTestnetService;
             _randomInvestmentTriggerService = randomInvestmentTriggerService;
