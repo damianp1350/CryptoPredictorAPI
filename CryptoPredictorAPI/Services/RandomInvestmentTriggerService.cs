@@ -1,4 +1,6 @@
-﻿using CryptoPredictorAPI.Services.IServices;
+﻿using CryptoPredictorAPI.Models;
+using CryptoPredictorAPI.Services.IServices;
+using Hangfire;
 
 namespace CryptoPredictorAPI.Services
 {
@@ -9,36 +11,42 @@ namespace CryptoPredictorAPI.Services
     {
         private readonly IBinanceService _binanceService;
         private readonly IBinanceTestnetService _binanceTestnetService;
+        private readonly IBinanceJsonDeserializer _binanceJsonDeserializer;
         private readonly ILogger<RandomInvestmentTriggerService> _logger;
         private readonly Random _random = new Random();
 
         public RandomInvestmentTriggerService(
             IBinanceService binanceService,
             IBinanceTestnetService binanceTestnetService,
+            IBinanceJsonDeserializer binanceJsonDeserializer,
             ILogger<RandomInvestmentTriggerService> logger)
         {
             _binanceService = binanceService;
             _binanceTestnetService = binanceTestnetService;
+            _binanceJsonDeserializer = binanceJsonDeserializer;
             _logger = logger;
         }
-
-        public Task TriggerInvestment()
+        public void ScheduleInvestment()
         {
-            return Task.Run(async () =>
+            RecurringJob.AddOrUpdate("RandomInvestmentTrigger", () => TriggerInvestment(), "* * * * *");
+        }
+        public async Task<(double randomNumber, BinanceResponse response)> TriggerInvestment()
+        {
+            var randomNumber = _random.NextDouble() * 100;
+            _logger.LogInformation($"Random number generated: {randomNumber}");
+
+            if (randomNumber >= 80)
             {
-                var randomNumber = _random.NextDouble() * 100;
+                _logger.LogInformation("Random number is greater than or equal to 80, initiating investment.");
+                var response = await InitiateInvestmentAsync();
+                return (randomNumber, response);
+            }
 
-                _logger.LogInformation($"Random number generated: {randomNumber}");
-
-                if (randomNumber >= 90)
-                {
-                    _logger.LogInformation("Random number is greater than or equal to 90, initiating investment.");
-                    await InitiateInvestmentAsync();
-                }
-            });
+            _logger.LogInformation("Random number is less than 80, no investment was made.");
+            return (randomNumber, null);
         }
 
-        private async Task InitiateInvestmentAsync()
+        private async Task<BinanceResponse> InitiateInvestmentAsync()
         {
             var symbol = "BTCUSDT";
             var quantity = 0.01m;
@@ -46,12 +54,15 @@ namespace CryptoPredictorAPI.Services
             var price = await _binanceService.FetchPrice(symbol);
             if (price.HasValue)
             {
-                var response = await _binanceTestnetService.MakeTestInvestment(symbol, quantity, price.Value);
-                _logger.LogInformation($"Investment response: {response}");
+                var jsonResponse = await _binanceTestnetService.MakeTestInvestment(symbol, quantity, price.Value);
+                var response = _binanceJsonDeserializer.Deserialize<BinanceResponse>(jsonResponse);
+                _logger.LogInformation($"Investment response: {jsonResponse}");
+                return response;
             }
             else
             {
                 _logger.LogError("Failed to fetch the current price.");
+                return null;
             }
         }
     }

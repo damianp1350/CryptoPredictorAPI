@@ -30,6 +30,9 @@ using (var serviceScope = app.Services.CreateScope())
 {
     var services = serviceScope.ServiceProvider;
 
+    var randomInvestmentTriggerService = services.GetRequiredService<IRandomInvestmentTriggerService>();
+    randomInvestmentTriggerService.ScheduleInvestment();
+
     var historicalDataRetrievalService = services.GetRequiredService<IBinanceAutoDataRetrievalService>();
     historicalDataRetrievalService.ScheduleHistoricalDataRetrieval();
 }

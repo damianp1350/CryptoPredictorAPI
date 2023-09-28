@@ -1,7 +1,10 @@
-﻿namespace CryptoPredictorAPI.Services.IServices
+﻿using CryptoPredictorAPI.Models;
+
+namespace CryptoPredictorAPI.Services.IServices
 {
     public interface IRandomInvestmentTriggerService
     {
-        Task TriggerInvestment();
+        void ScheduleInvestment();
+        Task<(double randomNumber, BinanceResponse response)> TriggerInvestment();
     }
 }
