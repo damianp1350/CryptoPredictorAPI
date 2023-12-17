@@ -2,6 +2,7 @@
 {
     public interface IBinanceHttpRequestMessageCreator
     {
+        HttpRequestMessage CreateFlaskPredictRequest(string filePath);
         HttpRequestMessage CreateHistoricalDataRequestMessage(string symbol, string interval, int limit = 500);
         HttpRequestMessage CreateHistoricalKlinesRequestMessage(string symbol, string interval, int limit, long? startTime = null, long? endTime = null);
         HttpRequestMessage CreatePriceRequestMessage(string symbol);

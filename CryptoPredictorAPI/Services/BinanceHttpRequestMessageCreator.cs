@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using System.Text;
 using CryptoPredictorAPI.Services.IServices;
+using System.Net.Http.Headers;
 
 namespace CryptoPredictorAPI.Services;
 
@@ -121,6 +122,25 @@ public class BinanceHttpRequestMessageCreator : IBinanceHttpRequestMessageCreato
                 "application/x-www-form-urlencoded"
             )
         };
+
+        return request;
+    }
+
+    public HttpRequestMessage CreateFlaskPredictRequest(string filePath)
+    {
+        var request = new HttpRequestMessage
+        {
+            Method = HttpMethod.Post,
+            RequestUri = new Uri("http://127.0.0.1:5000/predict"),
+        };
+
+        var content = new MultipartFormDataContent();
+        var fileContent = new ByteArrayContent(File.ReadAllBytes(filePath));
+        fileContent.Headers.ContentType = new MediaTypeHeaderValue("text/csv");
+
+        content.Add(fileContent, "file", Path.GetFileName(filePath));
+
+        request.Content = content;
 
         return request;
     }
