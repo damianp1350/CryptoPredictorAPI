@@ -46,7 +46,7 @@ CryptoPredictorAPI is a work in progress project aimed at interacting with the B
    }
    ```
 
-4. **You can connect your flask api to fetch predicted price from .h5 models.
+4. **You can connect your flask api to fetch predicted price from .h5 models**.
 
 5. **Database Migrations**:
    
