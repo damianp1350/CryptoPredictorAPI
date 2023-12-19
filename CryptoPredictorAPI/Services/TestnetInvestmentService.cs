@@ -4,9 +4,6 @@ using Hangfire;
 
 namespace CryptoPredictorAPI.Services
 {
-    /// <summary>
-    /// This service is for testing purposes only.
-    /// </summary>
     public class TestnetInvestmentService : ITestnetInvestmentService
     {
         private readonly IBinanceService _binanceService;
@@ -37,19 +34,22 @@ namespace CryptoPredictorAPI.Services
 
         public async Task SetPredictedPriceAsync(IFormFile file)
         {
-            _predictedPrice = await _flaskApiService.GetPredictionFromFlask(file); // TODO: Fetch price correctly
+            _predictedPrice = await _flaskApiService.GetPredictionFromFlask(file);
         }
 
         public async Task<(double? PredictedPrice, BinanceResponse Response)> TriggerInvestment()
         {
-            if (_predictedPrice.HasValue && _predictedPrice >= 40000) // TODO: if(predictedPrice >= currentPrice) -> invest - same for sell but with <=
+            decimal? currentMarketPriceDecimal = await _binanceService.FetchPrice("BTCUSDT");
+            double? currentMarketPrice = (double?)currentMarketPriceDecimal;
+
+            if (_predictedPrice.HasValue && currentMarketPrice.HasValue && _predictedPrice >= currentMarketPrice)
             {
-                _logger.LogInformation($"Predicted price {_predictedPrice.Value} is favorable for investment.");
+                _logger.LogInformation($"Predicted price {_predictedPrice.Value} is higher than the current market price {currentMarketPrice.Value}, initiating investment.");
                 var response = await InitiateInvestmentAsync();
                 return (_predictedPrice, response);
             }
 
-            _logger.LogInformation($"Predicted price: {_predictedPrice.Value} is not favorable for investment or not set.");
+            _logger.LogInformation($"Predicted price: {_predictedPrice} is not higher than the current market price {currentMarketPrice} or one of the prices is not set.");
             return (_predictedPrice, null);
         }
 
