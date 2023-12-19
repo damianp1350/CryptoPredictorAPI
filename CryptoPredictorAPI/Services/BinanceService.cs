@@ -40,7 +40,7 @@ namespace CryptoPredictorAPI.Services
             var priceData = _jsonDeserializer.Deserialize<BinancePriceDataModel>(responseData);
             if (priceData != null)
             {
-                if (decimal.TryParse(priceData.Price, NumberStyles.Number, new CultureInfo("en-US"), out var priceValue))
+                if (decimal.TryParse(priceData.Price, NumberStyles.AllowDecimalPoint, new CultureInfo("en-US"), out var priceValue))
                     return priceValue;
             }
             return null;

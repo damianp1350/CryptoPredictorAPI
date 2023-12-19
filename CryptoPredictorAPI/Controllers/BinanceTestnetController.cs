@@ -8,14 +8,14 @@ namespace CryptoPredictorAPI.Controllers
     public class BinanceTestnetController : ControllerBase
     {
         private readonly IBinanceTestnetService _binanceTestnetService;
-        private readonly ITestnetInvestmentService _randomInvestmentTriggerService;
+        private readonly ITestnetInvestmentService _testnetInvestmentService;
 
         public BinanceTestnetController(
             IBinanceTestnetService binanceTestnetService,
-            ITestnetInvestmentService randomInvestmentTriggerService)
+            ITestnetInvestmentService testnetInvestmentService)
         {
             _binanceTestnetService = binanceTestnetService;
-            _randomInvestmentTriggerService = randomInvestmentTriggerService;
+            _testnetInvestmentService = testnetInvestmentService;
         }
 
         [HttpPost("testInvestment")]
@@ -25,24 +25,14 @@ namespace CryptoPredictorAPI.Controllers
             return Ok(result);
         }
 
-        [HttpPost("triggerRandomInvestment")]
-        public async Task<IActionResult> TriggerRandomInvestment()
+        [HttpPost("triggerInvestmentDecision")]
+        public async Task<IActionResult> TriggerInvestmentDecision()
         {
-            var (predictedPrice, response) = await _randomInvestmentTriggerService.TriggerInvestment();
-
-            if (response != null)
-            {
-                return Ok(new
-                {
-                    RandomNumber = predictedPrice,
-                    InvestmentResponse = response
-                });
-            }
-
+            var (predictedPrice, response) = await _testnetInvestmentService.TriggerInvestment();
             return Ok(new
             {
-                RandomNumber = predictedPrice,
-                Message = $"Predicted price: {predictedPrice} is less than: 40000 , no investment was made." // price is a placeholder
+                PredictedPrice = predictedPrice,
+                InvestmentResponse = response
             });
         }
     }

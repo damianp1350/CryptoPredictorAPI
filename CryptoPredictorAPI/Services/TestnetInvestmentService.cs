@@ -10,21 +10,20 @@ namespace CryptoPredictorAPI.Services
         private readonly IBinanceTestnetService _binanceTestnetService;
         private readonly IBinanceJsonDeserializer _binanceJsonDeserializer;
         private readonly ILogger<TestnetInvestmentService> _logger;
-        private readonly IFlaskApiService _flaskApiService;
-        private double? _predictedPrice;
+        private readonly BinanceDbContext _dbContext;
 
         public TestnetInvestmentService(
             IBinanceService binanceService,
             IBinanceTestnetService binanceTestnetService,
             IBinanceJsonDeserializer binanceJsonDeserializer,
             ILogger<TestnetInvestmentService> logger,
-            IFlaskApiService flaskApiService)
+            BinanceDbContext dbContext)
         {
             _binanceService = binanceService;
             _binanceTestnetService = binanceTestnetService;
             _binanceJsonDeserializer = binanceJsonDeserializer;
             _logger = logger;
-            _flaskApiService = flaskApiService;
+            _dbContext = dbContext;
         }
 
         public void ScheduleInvestment()
@@ -32,25 +31,33 @@ namespace CryptoPredictorAPI.Services
             RecurringJob.AddOrUpdate("TestnetInvestment", () => TriggerInvestment(), "* * * * *");
         }
 
-        public async Task SetPredictedPriceAsync(IFormFile file)
-        {
-            _predictedPrice = await _flaskApiService.GetPredictionFromFlask(file);
-        }
-
         public async Task<(double? PredictedPrice, BinanceResponse Response)> TriggerInvestment()
         {
+            var latestPrediction = GetLatestPredictedPrice();
+            if (latestPrediction == null || latestPrediction.PredictedAt.Date != DateTime.UtcNow.Date)
+            {
+                _logger.LogInformation("No valid prediction for today's date. No investment will be made.");
+                return (null, null);
+            }
+
+            double? predictedPrice = latestPrediction.Price;
             decimal? currentMarketPriceDecimal = await _binanceService.FetchPrice("BTCUSDT");
             double? currentMarketPrice = (double?)currentMarketPriceDecimal;
 
-            if (_predictedPrice.HasValue && currentMarketPrice.HasValue && _predictedPrice >= currentMarketPrice)
+            if (predictedPrice.HasValue && currentMarketPrice.HasValue && predictedPrice >= currentMarketPrice)
             {
-                _logger.LogInformation($"Predicted price {_predictedPrice.Value} is higher than the current market price {currentMarketPrice.Value}, initiating investment.");
+                _logger.LogInformation($"Predicted price {predictedPrice.Value} is higher than the current market price {currentMarketPrice.Value}, initiating investment.");
                 var response = await InitiateInvestmentAsync();
-                return (_predictedPrice, response);
+                return (predictedPrice, response);
             }
 
-            _logger.LogInformation($"Predicted price: {_predictedPrice} is not higher than the current market price {currentMarketPrice} or one of the prices is not set.");
-            return (_predictedPrice, null);
+            _logger.LogInformation($"Predicted price: {predictedPrice} is not higher than the current market price {currentMarketPrice}.");
+            return (predictedPrice, null);
+        }
+
+        private PredictedPriceModel GetLatestPredictedPrice()
+        {
+            return _dbContext.PredictedPrices.OrderByDescending(p => p.PredictedAt).FirstOrDefault();
         }
 
         private async Task<BinanceResponse> InitiateInvestmentAsync()
