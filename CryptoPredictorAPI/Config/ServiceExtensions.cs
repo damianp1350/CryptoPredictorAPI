@@ -19,16 +19,15 @@ public static class ServiceExtensions
         services.AddScoped<IBinanceService, BinanceService>();
         services.AddScoped<IBinanceTestnetService, BinanceTestnetService>();
         services.AddScoped<ITestnetAssetSellService, TestnetAssetSellService>();
+        services.AddScoped<IFlaskApiService, FlaskApiService>();
+        services.AddScoped<IDatabaseCsvExportService, DatabaseCsvExportService>();
 
-        services.AddTransient<IFlaskApiService, FlaskApiService>();
-        services.AddTransient<IDatabaseCsvExportService, DatabaseCsvExportService>();
-        
         services.AddHttpClient("FlaskApiService");
         services.AddHttpClient("BinanceTestnetClient");
         services.AddHttpClient("BinanceClient");
 
         services.AddDbContext<BinanceDbContext>(options =>
-        options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+            options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
         services.Configure<CsvExportSettings>(configuration.GetSection("CsvExportSettings"));
 
         services.AddHangfire(x => x.UseSqlServerStorage(configuration.GetConnectionString("DefaultConnection")));

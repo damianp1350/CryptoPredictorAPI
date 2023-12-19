@@ -1,11 +1,5 @@
-﻿using CryptoPredictorAPI.Services.IServices;
-using CryptoPredictorAPI.Models;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
-using System;
-using System.IO;
-using System.Net.Http;
-using System.Threading.Tasks;
+﻿using CryptoPredictorAPI.Models;
+using CryptoPredictorAPI.Services.IServices;
 
 namespace CryptoPredictorAPI.Services
 {
@@ -16,19 +10,22 @@ namespace CryptoPredictorAPI.Services
         private readonly IBinanceJsonDeserializer _jsonDeserializer;
         private readonly IBinanceResponseHandler _responseHandler;
         private readonly ILogger<FlaskApiService> _logger;
+        private readonly BinanceDbContext _dbContext;
 
         public FlaskApiService(
             IHttpClientFactory httpClientFactory,
             IBinanceHttpRequestMessageCreator messageCreator,
             IBinanceJsonDeserializer jsonDeserializer,
             IBinanceResponseHandler responseHandler,
-            ILogger<FlaskApiService> logger)
+            ILogger<FlaskApiService> logger,
+            BinanceDbContext dbContext)
         {
             _httpClient = httpClientFactory.CreateClient("FlaskApiService");
             _messageCreator = messageCreator;
             _jsonDeserializer = jsonDeserializer;
             _responseHandler = responseHandler;
             _logger = logger;
+            _dbContext = dbContext;
         }
 
         public async Task<double?> GetPredictionFromFlask(IFormFile file)
@@ -57,7 +54,12 @@ namespace CryptoPredictorAPI.Services
                 }
 
                 var predictionResponse = _jsonDeserializer.Deserialize<PredictionResponse>(responseString);
-                return predictionResponse?.PredictedClosePrice;
+                if (predictionResponse != null)
+                {
+                    SavePredictedPrice(predictionResponse.PredictedClosePrice);
+                    return predictionResponse.PredictedClosePrice;
+                }
+                return null;
             }
             catch (Exception ex)
             {
@@ -71,6 +73,17 @@ namespace CryptoPredictorAPI.Services
                     File.Delete(filePath);
                 }
             }
+        }
+
+        private void SavePredictedPrice(double price)
+        {
+            var predictedPrice = new PredictedPriceModel
+            {
+                Price = price,
+                PredictedAt = DateTime.UtcNow
+            };
+            _dbContext.PredictedPrices.Add(predictedPrice);
+            _dbContext.SaveChanges();
         }
     }
 }

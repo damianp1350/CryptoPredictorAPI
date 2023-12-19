@@ -131,7 +131,7 @@ public class BinanceHttpRequestMessageCreator : IBinanceHttpRequestMessageCreato
         var request = new HttpRequestMessage
         {
             Method = HttpMethod.Post,
-            RequestUri = new Uri("http://127.0.0.1:5000/predict"),
+            RequestUri = new Uri("http://127.0.0.1:5001/predict"),
         };
 
         var content = new MultipartFormDataContent();
