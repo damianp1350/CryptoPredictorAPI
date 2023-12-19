@@ -5,6 +5,7 @@ namespace CryptoPredictorAPI.Services.IServices
     public interface ITestnetInvestmentService
     {
         void ScheduleInvestment();
-        Task<(double randomNumber, BinanceResponse response)> TriggerInvestment();
+        Task SetPredictedPriceAsync(IFormFile file);
+        Task<(double? PredictedPrice, BinanceResponse Response)> TriggerInvestment();
     }
 }

@@ -28,21 +28,21 @@ namespace CryptoPredictorAPI.Controllers
         [HttpPost("triggerRandomInvestment")]
         public async Task<IActionResult> TriggerRandomInvestment()
         {
-            var (randomNumber, response) = await _randomInvestmentTriggerService.TriggerInvestment();
+            var (predictedPrice, response) = await _randomInvestmentTriggerService.TriggerInvestment();
 
             if (response != null)
             {
                 return Ok(new
                 {
-                    RandomNumber = randomNumber,
+                    RandomNumber = predictedPrice,
                     InvestmentResponse = response
                 });
             }
 
             return Ok(new
             {
-                RandomNumber = randomNumber,
-                Message = "Random number is less than 80, no investment was made."
+                RandomNumber = predictedPrice,
+                Message = $"Predicted price: {predictedPrice} is less than: 40000 , no investment was made." // price is a placeholder
             });
         }
     }

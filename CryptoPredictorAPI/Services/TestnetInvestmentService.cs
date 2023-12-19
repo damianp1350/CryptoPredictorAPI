@@ -13,37 +13,44 @@ namespace CryptoPredictorAPI.Services
         private readonly IBinanceTestnetService _binanceTestnetService;
         private readonly IBinanceJsonDeserializer _binanceJsonDeserializer;
         private readonly ILogger<TestnetInvestmentService> _logger;
-        private readonly Random _random = new Random();
+        private readonly IFlaskApiService _flaskApiService;
+        private double? _predictedPrice;
 
         public TestnetInvestmentService(
             IBinanceService binanceService,
             IBinanceTestnetService binanceTestnetService,
             IBinanceJsonDeserializer binanceJsonDeserializer,
-            ILogger<TestnetInvestmentService> logger)
+            ILogger<TestnetInvestmentService> logger,
+            IFlaskApiService flaskApiService)
         {
             _binanceService = binanceService;
             _binanceTestnetService = binanceTestnetService;
             _binanceJsonDeserializer = binanceJsonDeserializer;
             _logger = logger;
+            _flaskApiService = flaskApiService;
         }
+
         public void ScheduleInvestment()
         {
             RecurringJob.AddOrUpdate("TestnetInvestment", () => TriggerInvestment(), "* * * * *");
         }
-        public async Task<(double randomNumber, BinanceResponse response)> TriggerInvestment()
-        {
-            var randomNumber = _random.NextDouble() * 100;
-            _logger.LogInformation($"Random number generated: {randomNumber}");
 
-            if (randomNumber >= 80)
+        public async Task SetPredictedPriceAsync(IFormFile file)
+        {
+            _predictedPrice = await _flaskApiService.GetPredictionFromFlask(file); // TODO: Fetch price correctly
+        }
+
+        public async Task<(double? PredictedPrice, BinanceResponse Response)> TriggerInvestment()
+        {
+            if (_predictedPrice.HasValue && _predictedPrice >= 40000) // TODO: if(predictedPrice >= currentPrice) -> invest - same for sell but with <=
             {
-                _logger.LogInformation("Random number is greater than or equal to 80, initiating investment.");
+                _logger.LogInformation($"Predicted price {_predictedPrice.Value} is favorable for investment.");
                 var response = await InitiateInvestmentAsync();
-                return (randomNumber, response);
+                return (_predictedPrice, response);
             }
 
-            _logger.LogInformation("Random number is less than 80, no investment was made.");
-            return (randomNumber, null);
+            _logger.LogInformation($"Predicted price: {_predictedPrice.Value} is not favorable for investment or not set.");
+            return (_predictedPrice, null);
         }
 
         private async Task<BinanceResponse> InitiateInvestmentAsync()

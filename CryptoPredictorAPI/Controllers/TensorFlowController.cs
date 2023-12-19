@@ -1,28 +1,23 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using CryptoPredictorAPI.Models;
 using CryptoPredictorAPI.Services.IServices;
+using Microsoft.AspNetCore.Http;
+using System.Threading.Tasks;
 
 [Route("api/[controller]")]
 [ApiController]
 public class TensorFlowController : ControllerBase
 {
-    private readonly ITensorFlowModelService _tensorFlowModelService;
+    private readonly IFlaskApiService _flaskApiService;
 
-    public TensorFlowController(ITensorFlowModelService tensorFlowModelService)
+    public TensorFlowController(IFlaskApiService flaskApiService)
     {
-        _tensorFlowModelService = tensorFlowModelService;
+        _flaskApiService = flaskApiService;
     }
 
-    [HttpPost("predict-with-model")]
-    public IActionResult Predict([FromBody] BitcoinPriceInput input)
+    [HttpPost("predict")]
+    public async Task<IActionResult> PredictPrice([FromForm] IFormFile file)
     {
-        if (input == null || input.CloseTime == 0)
-        {
-            return BadRequest("Invalid input data.");
-        }
-
-        var predictedPriceOutput = _tensorFlowModelService.Predict(input);
-
-        return Ok(predictedPriceOutput);
+        var prediction = await _flaskApiService.GetPredictionFromFlask(file);
+        return Ok(prediction);
     }
 }
