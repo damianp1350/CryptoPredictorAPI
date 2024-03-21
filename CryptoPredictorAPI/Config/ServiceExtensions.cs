@@ -14,13 +14,12 @@ public static class ServiceExtensions
         services.AddSingleton<IBinanceDataConverter, BinanceDataConverter>();
 
         services.AddScoped<ITestnetInvestmentService, TestnetInvestmentService>();
-        services.AddScoped<ITensorFlowModelService, TensorFlowModelService>();
         services.AddScoped<IBinanceAutoDataRetrievalService, BinanceAutoDataRetrievalService>();
         services.AddScoped<IBinanceService, BinanceService>();
         services.AddScoped<IBinanceTestnetService, BinanceTestnetService>();
         services.AddScoped<ITestnetAssetSellService, TestnetAssetSellService>();
         services.AddScoped<IFlaskApiService, FlaskApiService>();
-        services.AddScoped<IDatabaseCsvExportService, DatabaseCsvExportService>();
+        //services.AddScoped<IDatabaseCsvExportService, DatabaseCsvExportService>();
 
         services.AddHttpClient("FlaskApiService");
         services.AddHttpClient("BinanceTestnetClient");
