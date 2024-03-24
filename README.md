@@ -1,13 +1,13 @@
 # CryptoPredictorAPI
 
-CryptoPredictorAPI is a work in progress project aimed at interacting with the Binance and Binance Testnet APIs to fetch real-time and historical data, as well as trying to predict future prices using algorithms or your machine learning models.
+CryptoPredictorAPI is a work in progress project aimed at interacting with the Binance and Binance Testnet APIs to fetch real-time and historical data, as well as trying to predict future prices using your machine learning models.
 
 ## Features
 
 - Fetch real-time price data from Binance and Binance Testnet, with the ability to automatically retrieve data at specified intervals.
 - Export the fetched data to CSV for further analysis or training machine learning models.
-- Utilize predictive algorithms or your TensorFlow model to predict future price trends.
-- Random investment trigger service to simulate investment scenarios with Binance Testnet.
+- Utilize your TensorFlow model to predict future price trends.
+- Investment trigger service to simulate investment scenarios with Binance Testnet.
 
 ## Setup
 
@@ -46,7 +46,7 @@ CryptoPredictorAPI is a work in progress project aimed at interacting with the B
    }
    ```
 
-4. **You can add your TensorFlow model** (`model.pb`) to the `TensorFlowModelService` directory. Ensure you replace any placeholders with the actual column names. To view your column names, you can use TensorBoard or print them in the console.
+4. **You can connect your flask api to fetch predicted price from .h5 models**.
 
 5. **Database Migrations**:
    
