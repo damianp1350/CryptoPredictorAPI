@@ -44,7 +44,7 @@ namespace CryptoPredictorAPI.Services
             decimal? currentMarketPriceDecimal = await _binanceService.FetchPrice("BTCUSDT");
             double? currentMarketPrice = (double?)currentMarketPriceDecimal;
 
-            if (predictedPrice.HasValue && currentMarketPrice.HasValue && predictedPrice <= currentMarketPrice) // >= normalnie <= dla testow
+            if (predictedPrice.HasValue && currentMarketPrice.HasValue && predictedPrice >= currentMarketPrice)
             {
                 _logger.LogInformation($"Predicted price {predictedPrice.Value} is higher than the current market price {currentMarketPrice.Value}, initiating investment.");
                 var response = await InitiateInvestmentAsync();
