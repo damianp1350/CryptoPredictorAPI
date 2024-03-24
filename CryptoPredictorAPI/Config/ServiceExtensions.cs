@@ -14,7 +14,6 @@ public static class ServiceExtensions
         services.AddSingleton<IBinanceDataConverter, BinanceDataConverter>();
 
         services.AddScoped<ITestnetInvestmentService, TestnetInvestmentService>();
-        services.AddScoped<ITensorFlowModelService, TensorFlowModelService>();
         services.AddScoped<IBinanceAutoDataRetrievalService, BinanceAutoDataRetrievalService>();
         services.AddScoped<IBinanceService, BinanceService>();
         services.AddScoped<IBinanceTestnetService, BinanceTestnetService>();
