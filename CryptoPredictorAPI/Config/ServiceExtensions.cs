@@ -20,6 +20,7 @@ public static class ServiceExtensions
         services.AddScoped<ITestnetAssetSellService, TestnetAssetSellService>();
         services.AddScoped<IFlaskApiService, FlaskApiService>();
         services.AddScoped<IDatabaseCsvExportService, DatabaseCsvExportService>();
+        services.AddScoped<IFlaskApiPredictionService, FlaskApiPredictionService>();
 
         services.AddHttpClient("FlaskApiService");
         services.AddHttpClient("BinanceTestnetClient");

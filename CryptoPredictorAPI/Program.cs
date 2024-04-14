@@ -35,6 +35,9 @@ using (var serviceScope = app.Services.CreateScope())
 
     var binanceAutoDataRetrievalService = services.GetRequiredService<IBinanceAutoDataRetrievalService>();
     binanceAutoDataRetrievalService.ScheduleHistoricalDataRetrieval();
+
+    var flaskApiPredictionService = services.GetRequiredService<IFlaskApiPredictionService>();
+    flaskApiPredictionService.SchedulePrediction();
 }
 
 app.Run();

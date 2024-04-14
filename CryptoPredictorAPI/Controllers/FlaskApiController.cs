@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 
 [Route("api/[controller]")]
 [ApiController]
-public class TensorFlowController : ControllerBase
+public class FlaskApiController : ControllerBase
 {
     private readonly IFlaskApiService _flaskApiService;
 
-    public TensorFlowController(IFlaskApiService flaskApiService)
+    public FlaskApiController(IFlaskApiService flaskApiService)
     {
         _flaskApiService = flaskApiService;
     }
