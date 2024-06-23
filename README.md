@@ -1,3 +1,4 @@
+Damian Połubok
 # CryptoPredictorAPI
 
 CryptoPredictorAPI is a work in progress project aimed at interacting with the Binance and Binance Testnet APIs to fetch real-time and historical data, as well as trying to predict future prices using your machine learning models.
