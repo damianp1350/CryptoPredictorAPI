@@ -1,5 +1,4 @@
 using Hangfire;
-using CryptoPredictorAPI.Services.IServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,22 +22,5 @@ app.UseAuthorization();
 app.UseHangfireDashboard();
 
 app.MapControllers();
-
-using (var serviceScope = app.Services.CreateScope())
-{
-    var services = serviceScope.ServiceProvider;
-
-    var testnetInvestmentService = services.GetRequiredService<ITestnetInvestmentService>();
-    testnetInvestmentService.ScheduleInvestment();
-
-    var testnetAssetSellService = services.GetRequiredService<ITestnetAssetSellService>();
-    testnetAssetSellService.ScheduleSell();
-
-    var binanceAutoDataRetrievalService = services.GetRequiredService<IBinanceAutoDataRetrievalService>();
-    binanceAutoDataRetrievalService.ScheduleHistoricalDataRetrieval();
-
-    var flaskApiPredictionService = services.GetRequiredService<IFlaskApiPredictionService>();
-    flaskApiPredictionService.SchedulePrediction();
-}
 
 app.Run();

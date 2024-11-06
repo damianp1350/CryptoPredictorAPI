@@ -31,6 +31,11 @@ public class TestnetInvestmentService : ITestnetInvestmentService
         RecurringJob.AddOrUpdate("TestnetInvestment", () => TriggerInvestment(), "* * * * *");
     }
 
+    public void StopInvestment()
+    {
+        RecurringJob.RemoveIfExists("TestnetInvestment");
+    }
+
     public async Task<(double? PredictedPrice, BinanceResponse Response)> TriggerInvestment()
     {
         var latestPrediction = GetLatestPredictedPrice();

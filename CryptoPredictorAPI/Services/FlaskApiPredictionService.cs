@@ -7,11 +7,15 @@ public class FlaskApiPredictionService : IFlaskApiPredictionService
 {
     private readonly IServiceProvider _serviceProvider;
     private readonly IConfiguration _configuration;
-
-    public FlaskApiPredictionService(IServiceProvider serviceProvider, IConfiguration configuration)
+    private readonly ILogger<FlaskApiPredictionService> _logger;
+    public FlaskApiPredictionService(
+        IServiceProvider serviceProvider,
+        IConfiguration configuration,
+        ILogger<FlaskApiPredictionService> logger)
     {
         _serviceProvider = serviceProvider;
         _configuration = configuration;
+        _logger = logger;
     }
 
     public void SchedulePrediction()
@@ -19,12 +23,24 @@ public class FlaskApiPredictionService : IFlaskApiPredictionService
         RecurringJob.AddOrUpdate("ApiCallPrediction", () => TriggerPrediction(), Cron.Minutely);
     }
 
+    public void StopPrediction()
+    {
+        RecurringJob.RemoveIfExists("ApiCallPrediction");
+    }
+
     public async Task TriggerPrediction()
     {
+        var filePath = _configuration.GetValue<string>("CsvExportSettings:FilePath");
+
+        if (!File.Exists(filePath))
+        {
+            _logger.LogWarning("CSV file not found at path: {FilePath}. Prediction job will not proceed.", filePath);
+            return;
+        }
+
         using (var scope = _serviceProvider.CreateScope())
         {
             var flaskApiService = scope.ServiceProvider.GetRequiredService<IFlaskApiService>();
-            var filePath = _configuration.GetValue<string>("CsvExportSettings:FilePath");
 
             using (var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read))
             {

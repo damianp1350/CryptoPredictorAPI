@@ -1,10 +1,9 @@
 ﻿using System.Text.Json;
 using CryptoPredictorAPI.Models;
 
-namespace CryptoPredictorAPI.Services.IServices
+namespace CryptoPredictorAPI.Services.IServices;
+
+public interface IBinanceDataConverter
 {
-    public interface IBinanceDataConverter
-    {
-        public List<BinanceKlineModel> ConvertKlineData(List<JsonElement> klineData);
-    }
+    public List<BinanceKlineModel> ConvertKlineData(List<JsonElement> klineData);
 }

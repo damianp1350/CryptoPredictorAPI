@@ -15,13 +15,18 @@ public class BinanceAutoDataRetrievalService : IBinanceAutoDataRetrievalService
         _binanceService = binanceService;
     }
 
-    public void ScheduleHistoricalDataRetrieval()
+    public void ScheduleAllDataRetrieval()
     {
-        RecurringJob.AddOrUpdate("FetchHistoricalData", () => FetchAllHistoricalDataAutomated("BTCUSDT"), "*/2 * * * *");
+        RecurringJob.AddOrUpdate("FetchAllData", () => FetchAllDataAutomated("BTCUSDT"), "*/2 * * * *");
+    }
+
+    public void StopAllDataRetrieval()
+    {
+        RecurringJob.RemoveIfExists("FetchAllData");
     }
 
     [DisableConcurrentExecution(180)]
-    public async Task FetchAllHistoricalDataAutomated(string symbol)
+    public async Task FetchAllDataAutomated(string symbol)
     {
         long? lastFetchedOpenTime = _dbContext.BinanceHistoricalData.Max(m => (long?)m.OpenTime);
 
@@ -31,7 +36,7 @@ public class BinanceAutoDataRetrievalService : IBinanceAutoDataRetrievalService
 
         if (_currentStartTime >= GetCurrentUnixTime())
         {
-            RecurringJob.RemoveIfExists("FetchHistoricalData");
+            RecurringJob.RemoveIfExists("FetchAllData");
             return;
         }
 

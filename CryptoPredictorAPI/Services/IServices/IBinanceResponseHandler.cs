@@ -1,7 +1,6 @@
-﻿namespace CryptoPredictorAPI.Services.IServices
+﻿namespace CryptoPredictorAPI.Services.IServices;
+
+public interface IBinanceResponseHandler
 {
-    public interface IBinanceResponseHandler
-    {
-        Task<string> HandleResponse(HttpResponseMessage response);
-    }
+    Task<string> HandleResponse(HttpResponseMessage response);
 }
