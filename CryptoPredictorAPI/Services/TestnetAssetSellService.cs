@@ -25,9 +25,15 @@ public class TestnetAssetSellService : ITestnetAssetSellService
         _logger = logger;
         _dbContext = dbContext;
     }
+
     public void ScheduleSell()
     {
         RecurringJob.AddOrUpdate("AssetSell", () => TriggerAssetSell(), "* * * * *");
+    }
+
+    public void StopSell()
+    {
+        RecurringJob.RemoveIfExists("AssetSell");
     }
 
     public async Task<(double? PredictedPrice, BinanceResponse Response)> TriggerAssetSell()
@@ -58,8 +64,6 @@ public class TestnetAssetSellService : ITestnetAssetSellService
     {
         return _dbContext.PredictedPrices.OrderByDescending(p => p.PredictedAt).FirstOrDefault();
     }
-
-
 
     private async Task<BinanceResponse> InitiateAssetSellAsync()
     {

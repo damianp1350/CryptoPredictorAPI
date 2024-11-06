@@ -1,7 +1,6 @@
-﻿namespace CryptoPredictorAPI.Services.IServices
+﻿namespace CryptoPredictorAPI.Services.IServices;
+
+public interface IDatabaseCsvExportService
 {
-    public interface IDatabaseCsvExportService
-    {
-        void ExportDataToCsv(string filePath);
-    }
+    void ExportDataToCsv(string filePath);
 }

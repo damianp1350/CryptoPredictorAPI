@@ -30,7 +30,6 @@ public class BinanceService : IBinanceService
         _dataConverter = dataConverter;
     }
 
-
     public async Task<decimal?> FetchPrice(string symbol)
     {
         var request = _messageCreator.CreatePriceRequestMessage(symbol);
@@ -54,6 +53,7 @@ public class BinanceService : IBinanceService
 
         return _jsonDeserializer.Deserialize<List<List<object>>>(responseData);
     }
+
     public async Task<List<List<object>>> FetchHistoricalData24h(string symbol)
     {
         const string interval = "1h";

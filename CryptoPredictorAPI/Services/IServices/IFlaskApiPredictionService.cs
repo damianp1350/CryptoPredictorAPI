@@ -1,8 +1,8 @@
-﻿namespace CryptoPredictorAPI.Services.IServices
+﻿namespace CryptoPredictorAPI.Services.IServices;
+
+public interface IFlaskApiPredictionService
 {
-    public interface IFlaskApiPredictionService
-    {
-        void SchedulePrediction();
-        Task TriggerPrediction();
-    }
+    void SchedulePrediction();
+    void StopPrediction();
+    Task TriggerPrediction();
 }

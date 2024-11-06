@@ -1,7 +1,6 @@
-﻿namespace CryptoPredictorAPI.Services.IServices
+﻿namespace CryptoPredictorAPI.Services.IServices;
+
+public interface IBinanceJsonDeserializer
 {
-    public interface IBinanceJsonDeserializer
-    {
-        T Deserialize<T>(string data);
-    }
+    T Deserialize<T>(string data);
 }

@@ -1,10 +1,10 @@
 ﻿using CryptoPredictorAPI.Models;
 
-namespace CryptoPredictorAPI.Services.IServices
+namespace CryptoPredictorAPI.Services.IServices;
+
+public interface ITestnetInvestmentService
 {
-    public interface ITestnetInvestmentService
-    {
-        void ScheduleInvestment();
-        Task<(double? PredictedPrice, BinanceResponse Response)> TriggerInvestment();
-    }
+    void ScheduleInvestment();
+    void StopInvestment();
+    Task<(double? PredictedPrice, BinanceResponse Response)> TriggerInvestment();
 }
