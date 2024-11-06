@@ -1,7 +1,6 @@
-﻿namespace CryptoPredictorAPI.Models
+﻿namespace CryptoPredictorAPI.Models;
+
+public class CsvExportSettings
 {
-    public class CsvExportSettings
-    {
-        public string FilePath { get; set; }
-    }
+    public string FilePath { get; set; }
 }
