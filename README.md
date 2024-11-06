@@ -31,7 +31,7 @@ CryptoPredictorAPI is a work in progress project aimed at interacting with the B
 
 3. **Update the `.env` file**. Replace the placeholders for Binance API keys, Binance Testnet API keys, CSV export file path, and the database connection string:
    ```
-   # Essential settings for Binance API keys
+   # Binance API keys
    BINANCESETTINGS__APIKEY=PLACEHOLDER
    BINANCESETTINGS__APISECRET=PLACEHOLDER
       
