@@ -41,10 +41,6 @@ CryptoPredictorAPI is a work in progress project aimed at interacting with the B
       
    # CSV Export File Path
    CSVEXPORTSETTINGS__FILEPATH=PLACEHOLDER
-      
-   # Connection Strings
-   CONNECTIONSTRINGS__DEFAULTCONNECTION=Server=PLACEHOLDER;Database=Binance;Trusted_Connection=True;TrustServerCertificate=True;
-
    ```
 
 4. **You can connect your flask api to fetch predicted price from .h5 models or use the one below**.
