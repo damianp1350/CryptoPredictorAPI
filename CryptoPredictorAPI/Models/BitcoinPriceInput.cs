@@ -1,7 +1,6 @@
-﻿namespace CryptoPredictorAPI.Models
+﻿namespace CryptoPredictorAPI.Models;
+
+public class BitcoinPriceInput
 {
-    public class BitcoinPriceInput
-    {
-        public float CloseTime { get; set; }
-    }
+    public float CloseTime { get; set; }
 }

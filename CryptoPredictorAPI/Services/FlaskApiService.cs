@@ -1,89 +1,88 @@
 ﻿using CryptoPredictorAPI.Models;
 using CryptoPredictorAPI.Services.IServices;
 
-namespace CryptoPredictorAPI.Services
+namespace CryptoPredictorAPI.Services;
+
+public class FlaskApiService : IFlaskApiService
 {
-    public class FlaskApiService : IFlaskApiService
+    private readonly HttpClient _httpClient;
+    private readonly IBinanceHttpRequestMessageCreator _messageCreator;
+    private readonly IBinanceJsonDeserializer _jsonDeserializer;
+    private readonly IBinanceResponseHandler _responseHandler;
+    private readonly ILogger<FlaskApiService> _logger;
+    private readonly BinanceDbContext _dbContext;
+
+    public FlaskApiService(
+        IHttpClientFactory httpClientFactory,
+        IBinanceHttpRequestMessageCreator messageCreator,
+        IBinanceJsonDeserializer jsonDeserializer,
+        IBinanceResponseHandler responseHandler,
+        ILogger<FlaskApiService> logger,
+        BinanceDbContext dbContext)
     {
-        private readonly HttpClient _httpClient;
-        private readonly IBinanceHttpRequestMessageCreator _messageCreator;
-        private readonly IBinanceJsonDeserializer _jsonDeserializer;
-        private readonly IBinanceResponseHandler _responseHandler;
-        private readonly ILogger<FlaskApiService> _logger;
-        private readonly BinanceDbContext _dbContext;
+        _httpClient = httpClientFactory.CreateClient("FlaskApiService");
+        _messageCreator = messageCreator;
+        _jsonDeserializer = jsonDeserializer;
+        _responseHandler = responseHandler;
+        _logger = logger;
+        _dbContext = dbContext;
+    }
 
-        public FlaskApiService(
-            IHttpClientFactory httpClientFactory,
-            IBinanceHttpRequestMessageCreator messageCreator,
-            IBinanceJsonDeserializer jsonDeserializer,
-            IBinanceResponseHandler responseHandler,
-            ILogger<FlaskApiService> logger,
-            BinanceDbContext dbContext)
+    public async Task<double?> GetPredictionFromFlask(IFormFile file)
+    {
+        if (file == null || file.Length == 0)
         {
-            _httpClient = httpClientFactory.CreateClient("FlaskApiService");
-            _messageCreator = messageCreator;
-            _jsonDeserializer = jsonDeserializer;
-            _responseHandler = responseHandler;
-            _logger = logger;
-            _dbContext = dbContext;
+            _logger.LogError("File is not provided or empty.");
+            return null;
         }
 
-        public async Task<double?> GetPredictionFromFlask(IFormFile file)
+        var filePath = Path.GetTempFileName();
+        try
         {
-            if (file == null || file.Length == 0)
+            using (var stream = new FileStream(filePath, FileMode.Create))
             {
-                _logger.LogError("File is not provided or empty.");
+                await file.CopyToAsync(stream);
+            }
+
+            var request = _messageCreator.CreateFlaskPredictRequest(filePath);
+            var response = await _httpClient.SendAsync(request);
+            var responseString = await _responseHandler.HandleResponse(response);
+
+            if (string.IsNullOrEmpty(responseString))
+            {
                 return null;
             }
 
-            var filePath = Path.GetTempFileName();
-            try
+            var predictionResponse = _jsonDeserializer.Deserialize<PredictionResponse>(responseString);
+            if (predictionResponse != null)
             {
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                {
-                    await file.CopyToAsync(stream);
-                }
-
-                var request = _messageCreator.CreateFlaskPredictRequest(filePath);
-                var response = await _httpClient.SendAsync(request);
-                var responseString = await _responseHandler.HandleResponse(response);
-
-                if (string.IsNullOrEmpty(responseString))
-                {
-                    return null;
-                }
-
-                var predictionResponse = _jsonDeserializer.Deserialize<PredictionResponse>(responseString);
-                if (predictionResponse != null)
-                {
-                    SavePredictedPrice(predictionResponse.PredictedClosePrice);
-                    return predictionResponse.PredictedClosePrice;
-                }
-                return null;
+                SavePredictedPrice(predictionResponse.PredictedClosePrice);
+                return predictionResponse.PredictedClosePrice;
             }
-            catch (Exception ex)
-            {
-                _logger.LogError($"An error occurred while processing the file: {ex.Message}");
-                return null;
-            }
-            finally
-            {
-                if (File.Exists(filePath))
-                {
-                    File.Delete(filePath);
-                }
-            }
+            return null;
         }
-
-        private void SavePredictedPrice(double price)
+        catch (Exception ex)
         {
-            var predictedPrice = new PredictedPriceModel
-            {
-                Price = price,
-                PredictedAt = DateTime.UtcNow
-            };
-            _dbContext.PredictedPrices.Add(predictedPrice);
-            _dbContext.SaveChanges();
+            _logger.LogError($"An error occurred while processing the file: {ex.Message}");
+            return null;
         }
+        finally
+        {
+            if (File.Exists(filePath))
+            {
+                File.Delete(filePath);
+            }
+        }
+    }
+
+    private void SavePredictedPrice(double price)
+    {
+        var predictedPrice = new PredictedPriceModel
+        {
+            Price = price,
+            PredictedAt = DateTime.UtcNow
+        };
+        _dbContext.PredictedPrices.Add(predictedPrice);
+        _dbContext.SaveChanges();
     }
 }

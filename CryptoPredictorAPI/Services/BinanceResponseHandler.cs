@@ -1,26 +1,25 @@
 ﻿using CryptoPredictorAPI.Services.IServices;
 
-namespace CryptoPredictorAPI.Services
+namespace CryptoPredictorAPI.Services;
+
+public class BinanceResponseHandler : IBinanceResponseHandler
 {
-    public class BinanceResponseHandler : IBinanceResponseHandler
+    private readonly ILogger<BinanceResponseHandler> _logger;
+
+    public BinanceResponseHandler(ILogger<BinanceResponseHandler> logger)
     {
-        private readonly ILogger<BinanceResponseHandler> _logger;
+        _logger = logger;
+    }
 
-        public BinanceResponseHandler(ILogger<BinanceResponseHandler> logger)
+    public async Task<string> HandleResponse(HttpResponseMessage response)
+    {
+        if (!response.IsSuccessStatusCode)
         {
-            _logger = logger;
+            var errorContent = await response.Content.ReadAsStringAsync();
+            _logger.LogError($"Error: {response.StatusCode}, Content: {errorContent}");
         }
 
-        public async Task<string> HandleResponse(HttpResponseMessage response)
-        {
-            if (!response.IsSuccessStatusCode)
-            {
-                var errorContent = await response.Content.ReadAsStringAsync();
-                _logger.LogError($"Error: {response.StatusCode}, Content: {errorContent}");
-            }
-
-            response.EnsureSuccessStatusCode();
-            return await response.Content.ReadAsStringAsync();
-        }
+        response.EnsureSuccessStatusCode();
+        return await response.Content.ReadAsStringAsync();
     }
 }
