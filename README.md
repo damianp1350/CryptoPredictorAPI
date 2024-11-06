@@ -29,7 +29,7 @@ CryptoPredictorAPI is a work in progress project aimed at interacting with the B
    cd .\CryptoPredictorAPI\
    ```
 
-3. **Update the `.env` file**. Replace the placeholders for Binance API keys, Binance Testnet API keys, CSV export file path, and the database connection string:
+3. **Update the `.env` file**. Replace the placeholders for Binance API keys, Binance Testnet API keys. Update appsettings.json with your CSV export file path(project path by default), and the database connection string(set to default SQL Server connection srting):
    ```
    # Binance API keys
    BINANCESETTINGS__APIKEY=PLACEHOLDER
@@ -38,9 +38,6 @@ CryptoPredictorAPI is a work in progress project aimed at interacting with the B
    # Binance Testnet API keys
    BINANCETESTNETSETTINGS__APIKEY=PLACEHOLDER
    BINANCETESTNETSETTINGS__APISECRET=PLACEHOLDER
-      
-   # CSV Export File Path
-   CSVEXPORTSETTINGS__FILEPATH=PLACEHOLDER
    ```
 
 4. **You can connect your flask api to fetch predicted price from .h5 models or use the one below**.
