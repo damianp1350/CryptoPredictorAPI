@@ -29,7 +29,7 @@ CryptoPredictorAPI is a work in progress project aimed at interacting with the B
    cd .\CryptoPredictorAPI\
    ```
 
-3. **Update the `.env` file**. Replace the placeholders for Binance API keys, Binance Testnet API keys. Update appsettings.json with your CSV export file path(project path by default), and the database connection string(set to default SQL Server connection srting):
+3. **Update the `.env` file**. Replace the placeholders for Binance API keys, Binance Testnet API keys. Update appsettings.json with your CSV export file path(project path by default), and the database connection string(set to default SQL Server connection string):
    ```
    # Binance API keys
    BINANCESETTINGS__APIKEY=PLACEHOLDER
